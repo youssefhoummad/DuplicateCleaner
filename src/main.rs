@@ -116,11 +116,11 @@ impl DuplicateCleaner {
         self.list_view.clear();
         self.lbl_status.set_text("جارٍ الفحص وحساب البصمات (xxHash)... يرجى الانتظار.");
         
-        // إعداد أعمدة القائمة إذا كانت فارغة
+        // إعداد أعمدة القائمة إذا كانت فارغة - تم تصحيح الثوابت إلى حروف كبيرة
         if self.list_view.column_len() == 0 {
-            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(0), fmt: Some(nwg::ListViewColumnFlags::Left), width: Some(500), text: Some("مسار الملف".to_string()) });
-            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(1), fmt: Some(nwg::ListViewColumnFlags::Left), width: Some(100), text: Some("الإجراء".to_string()) });
-            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(2), fmt: Some(nwg::ListViewColumnFlags::Left), width: Some(100), text: Some("الحجم".to_string()) });
+            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(0), fmt: Some(nwg::ListViewColumnFlags::LEFT), width: Some(500), text: Some("مسار الملف".to_string()) });
+            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(1), fmt: Some(nwg::ListViewColumnFlags::LEFT), width: Some(100), text: Some("الإجراء".to_string()) });
+            self.list_view.insert_column(nwg::InsertListViewColumn { index: Some(2), fmt: Some(nwg::ListViewColumnFlags::LEFT), width: Some(100), text: Some("الحجم".to_string()) });
         }
 
         let is_single = f2.is_empty();
@@ -193,17 +193,19 @@ impl DuplicateCleaner {
     }
 
     fn populate_list(&self, groups: Vec<Vec<PathBuf>>) {
-        let mut row_index = 0;
+        let mut row_index: i32 = 0; // تعديل نوع البيانات ليتوافق مع الإدخال
         for group in groups {
             // الأصل
             self.list_view.insert_item(nwg::InsertListViewItem { index: Some(row_index), column_index: 0, text: Some(group[0].to_string_lossy().to_string()), image: None });
-            self.list_view.update_item(row_index, nwg::InsertListViewItem { index: Some(row_index), column_index: 1, text: Some("يُحتفظ به".to_string()), image: None });
+            // تم تصحيح تحويل النوع هنا
+            self.list_view.update_item(row_index as usize, nwg::InsertListViewItem { index: Some(row_index), column_index: 1, text: Some("يُحتفظ به".to_string()), image: None });
             row_index += 1;
 
             // المكررات (النقل)
             for file in group.iter().skip(1) {
                 self.list_view.insert_item(nwg::InsertListViewItem { index: Some(row_index), column_index: 0, text: Some(file.to_string_lossy().to_string()), image: None });
-                self.list_view.update_item(row_index, nwg::InsertListViewItem { index: Some(row_index), column_index: 1, text: Some("سيُنقل".to_string()), image: None });
+                // تم تصحيح تحويل النوع هنا
+                self.list_view.update_item(row_index as usize, nwg::InsertListViewItem { index: Some(row_index), column_index: 1, text: Some("سيُنقل".to_string()), image: None });
                 row_index += 1;
             }
         }
@@ -220,7 +222,6 @@ impl DuplicateCleaner {
     }
 
     fn quarantine_files(&self) {
-        // يمكن تطوير دالة النقل هنا بنفس منطق نقل الملفات الذي تم بناؤه في البايثون
         nwg::modal_info_message(&self.window, "معلومة", "تم التعرف على الملفات بنجاح. دالة النقل يمكن إضافتها لتقوم بتحريك الملفات إلى مجلد Quarantine.");
     }
 }
