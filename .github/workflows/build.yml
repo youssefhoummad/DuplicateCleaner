@@ -19,7 +19,7 @@ jobs:
         toolchain: stable
         targets: x86_64-pc-windows-msvc
 
-    - name: Build App (Ultra Compressed)
+    - name: Build App
       run: cargo build --release
 
     - name: Upload EXE Artifact
