@@ -3,18 +3,20 @@ name = "duplicate_cleaner"
 version = "0.1.0"
 edition = "2021"
 
-# إعدادات سحرية لضغط الحجم لأقل من 2 ميغابايت
 [profile.release]
-opt-level = "z"      # تحسين الكود لتقليل الحجم
-lto = true           # تفعيل Link Time Optimization لدمج وحذف الأكواد غير المستخدمة
-codegen-units = 1    # بناء الكود كوحدة واحدة لزيادة كفاءة الضغط
-panic = "abort"      # إلغاء رسائل الخطأ التفصيلية لتوفير المساحة
-strip = true         # حذف الرموز البرمجية (Symbols) من الملف التنفيذي النهائي
+opt-level = "z"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
 
 [dependencies]
 native-windows-gui = "1.0.13"
 native-windows-derive = "1.0.5"
 walkdir = "2.4.0"
 xxhash-rust = { version = "0.8.19", features = ["xxh3"] }
-opener = "0.7.1"
-windows-sys = { version = "0.59.0", features = ["Win32_UI_WindowsAndMessaging", "Win32_UI_Controls"] }
+opener = "0.7.2"
+chrono = "0.4.38"
+
+[build-dependencies]
+winres = "0.1.12"

@@ -1,7 +1,8 @@
-// build.rs
 fn main() {
     if std::env::var("CARGO_CFG_TARGET_OS").unwrap() == "windows" {
-        // تضمين ملف الـ Manifest لضمان عمل واجهات ويندوز الحديثة بدون أخطاء
-        println!("cargo:rustc-link-lib=dylib=comctl32");
+        let mut res = winres::WindowsResource::new();
+        // هذا السطر يربط الأيقونة icon_2.ico بالبرنامج
+        res.set_icon("icon_2.ico");
+        res.compile().unwrap();
     }
 }
